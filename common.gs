@@ -1,51 +1,63 @@
-
-function updateTimeline()
+function getProp(key)
 {
-  /////////// CONSTANTS /////////////
-  var REFSHEET = "Sheet18";
-  var COL_NAME_IDX = 2;
-  var COL_ID_IDX   = 0;
-  var COL_EST_IDX  = 3;
-  var MAX_ROW_CNT  = 30;
-  var ROW_START_OFFSET = 2;
-  ///////////////////////////////////
-  
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheetByName(REFSHEET);
-  var values = sheet.getSheetValues(1, 1, MAX_ROW_CNT, 4);
-  var count = 0;
-  var bgcolor = true;
-  
-  ss.getActiveSheet().getRange(2, ss.getActiveCell().getColumn(), MAX_ROW_CNT).clear();
-  
-  for (var i = 0; i < MAX_ROW_CNT; i++)
+  return PropertiesService.getScriptProperties().getProperty(key);
+}
+
+function setProp(key, value)
+{
+  PropertiesService.getScriptProperties().setProperty(key, value);
+}
+
+function setUserId(idValue)
+{
+  setProp("USER_ID", idValue);
+}
+
+function getUserId()
+{
+  return getProp("USER_ID");
+}
+
+function setApiKey(keyValue)
+{
+  setProp("API_KEY", keyValue);
+}
+
+function getApiKey()
+{
+  return getProp("API_KEY");
+}
+
+function setBaseUrl(url)
+{
+  setProp("BASE_URL", url);
+}
+
+function getBaseUrl()
+{
+  return getProp("BASE_URL");
+}
+
+function setSearchJql(jql)
+{
+  setProp("SEARCH_JQL", jql);
+}
+
+function getSearchJql()
+{
+  return getProp("SEARCH_JQL");
+}
+
+function test()
+{
+  var value = getProp("pht123");
+  if (value == null)
   {
-    if (values[i][COL_NAME_IDX] == ss.getActiveCell().getValue())
-    {
-      for (var j = 0; j < values[i][COL_EST_IDX]; j++)
-      {
-        var tmp = ss.getActiveSheet().getRange(count + ROW_START_OFFSET, ss.getActiveCell().getColumn());
-        
-        tmp.setValue(values[i][COL_ID_IDX]);
-        
-        if (bgcolor == true)
-        {
-          tmp.setBackgroundRGB(150, 100, 100);
-        }
-        else
-        {
-          tmp.setBackgroundRGB(200, 200, 200);
-        }
-        count++;
-      }
-      if (bgcolor == true)
-      {
-        bgcolor = false;
-      }
-      else
-      {
-        bgcolor = true;
-      }
-    }
+    value = Browser.inputBox("Please enter value");
   }
+  else
+  {
+    Browser.msgBox(value);
+  }
+  SpreadsheetApp.getActiveSpreadsheet().getActiveCell().setValue(value)
 }
